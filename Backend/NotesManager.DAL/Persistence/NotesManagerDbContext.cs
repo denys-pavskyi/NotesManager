@@ -3,11 +3,11 @@ using NotesManager.DAL.Entities;
 
 namespace NotesManager.DAL.Persistence;
 
-public class NotesManagesDbContext : DbContext
+public class NotesManagerDbContext : DbContext
 {
     public DbSet<Note> Notes { get; set; }
 
-    public NotesManagesDbContext(DbContextOptions<NotesManagesDbContext> options) : base(options)
+    public NotesManagerDbContext(DbContextOptions<NotesManagerDbContext> options) : base(options)
     {
     }
 
