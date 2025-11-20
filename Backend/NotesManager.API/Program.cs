@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using NotesManager.API.Models;
 using NotesManager.API.Others;
 using NotesManager.BLL.Others;
+using NotesManager.BLL.Services;
+using NotesManager.BLL.Services.Interfaces;
 using NotesManager.DAL.Persistence;
 using NotesManager.DAL.Repositories.Interfaces;
 using NotesManager.DAL.Repositories.Realizations;
@@ -37,6 +39,9 @@ namespace NotesManager.API
                         .WithMethods(corsConfig.AllowedMethods);
                 });
             });
+
+            // Services
+            builder.Services.AddScoped<INoteService, NoteService>();
 
             builder.Services.AddSwaggerGen();
             builder.Services.AddControllers();
