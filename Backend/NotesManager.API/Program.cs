@@ -1,10 +1,11 @@
-
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using NotesManager.API.Models;
 using NotesManager.API.Others;
 using NotesManager.BLL.Others;
 using NotesManager.BLL.Services;
 using NotesManager.BLL.Services.Interfaces;
+using NotesManager.BLL.Validators;
 using NotesManager.DAL.Persistence;
 using NotesManager.DAL.Repositories.Interfaces;
 using NotesManager.DAL.Repositories.Realizations;
@@ -28,6 +29,7 @@ namespace NotesManager.API
 
             // Repository
             builder.Services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
+            builder.Services.AddValidatorsFromAssemblyContaining<NoteDtoValidator>();
 
             var corsConfig = builder.Configuration.GetSection("CORS").Get<CorsConfiguration>();
             builder.Services.AddCors(opt =>
