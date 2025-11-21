@@ -13,18 +13,18 @@ public static class ValidationHelper
         if (!validationResult.IsValid)
         {
             var errors = validationResult.Errors
-      .GroupBy(e => e.PropertyName)
-       .ToDictionary(
-     g => g.Key,
-            g => g.Select(e => e.ErrorMessage).ToList()
-    );
+                .GroupBy(e => e.PropertyName)
+                .ToDictionary(
+                    g => g.Key,
+                    g => g.Select(e => e.ErrorMessage).ToList()
+                );
 
-          return new ErrorResponse
-    {
-       StatusCode = 400,
-       Message = "Validation failed",
-  Errors = errors
-       };
+            return new ErrorResponse
+            {
+                StatusCode = 400,
+                Message = "Validation failed",
+                Errors = errors
+            };
         }
 
         return null;
