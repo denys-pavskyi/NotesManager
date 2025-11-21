@@ -5,7 +5,7 @@ using NotesManager.API.Others;
 using NotesManager.BLL.Others;
 using NotesManager.BLL.Services;
 using NotesManager.BLL.Services.Interfaces;
-using NotesManager.BLL.Validators;
+using NotesManager.BLL.Validators.Notes;
 using NotesManager.DAL.Persistence;
 using NotesManager.DAL.Repositories.Interfaces;
 using NotesManager.DAL.Repositories.Realizations;

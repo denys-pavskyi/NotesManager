@@ -1,6 +1,6 @@
-﻿namespace NotesManager.BLL.Models.Dtos;
+﻿namespace NotesManager.BLL.Models.Requests;
 
-public class NoteDto
+public class UpdateNoteRequest
 {
     public string Title { get; set; } = null!;
     public string Content { get; set; } = null!;

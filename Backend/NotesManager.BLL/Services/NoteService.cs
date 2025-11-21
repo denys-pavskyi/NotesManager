@@ -1,9 +1,10 @@
 ﻿using AutoMapper;
 using NotesManager.BLL.Models.Dtos;
+using NotesManager.BLL.Models.Requests;
 using NotesManager.BLL.Others.ResultPattern;
+using NotesManager.BLL.Services.Interfaces;
 using NotesManager.DAL.Entities;
 using NotesManager.DAL.Repositories.Interfaces;
-using NotesManager.BLL.Services.Interfaces;
 
 namespace NotesManager.BLL.Services;
 
@@ -59,9 +60,9 @@ public class NoteService : INoteService
             "Failed to add note");
     }
 
-    public async Task<Result<NoteDto>> UpdateAsync(NoteDto noteDto)
+    public async Task<Result<NoteDto>> UpdateAsync(Guid noteId, UpdateNoteRequest noteDto)
     {
-        var note = await _repositoryWrapper.NoteRepository.GetByIdAsync(noteDto.Id);
+        var note = await _repositoryWrapper.NoteRepository.GetByIdAsync(noteId);
         if (note == null)
         {
             return Result<NoteDto>.Fail(

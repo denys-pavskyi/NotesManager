@@ -1,9 +1,10 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using NotesManager.BLL.Models.Dtos;
-using NotesManager.BLL.Services.Interfaces;
 using NotesManager.API.Others;
+using NotesManager.BLL.Models.Dtos;
+using NotesManager.BLL.Models.Requests;
 using NotesManager.BLL.Others.ResultPattern;
+using NotesManager.BLL.Services.Interfaces;
 
 namespace NotesManager.API.Controllers
 {
@@ -39,14 +40,10 @@ namespace NotesManager.API.Controllers
             return result.ToActionResult();
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Update(Guid id, [FromBody] NoteDto noteDto)
+        [HttpPut("{noteId}")]
+        public async Task<IActionResult> Update(Guid noteId, [FromBody] UpdateNoteRequest updateNoteRequest)
         {
-            if (id != noteDto.Id)
-            {
-                return Result<NoteDto>.Fail(BLL.Others.ResultPattern.ErrorType.Validation, "Id in URL and body do not match").ToActionResult();
-            }
-            var result = await _noteService.UpdateAsync(noteDto);
+            var result = await _noteService.UpdateAsync(noteId, updateNoteRequest);
             return result.ToActionResult();
         }
 
