@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import './HomePage.scss';
 import { useAppDispatch, useAppSelector } from '../../hooks/useAppDispatch';
-import { fetchAllNotes, createNote } from '../../store/notesSlice';
+import { fetchAllNotes, createNote, deleteNote } from '../../store/notesSlice';
 import type { Note } from '../../types/note';
 import { NoteCard } from '../../components/note-card/NoteCard';
 import { CreateNoteModal } from '../../components/create-note-modal/CreateNoteModal';
+import { ConfirmModal } from '../../components/confirm-modal/ConfirmModal';
 import refreshIcon from '../../assets/refresh-page-option.png';
 import addPostIcon from '../../assets/add-post.png';
 
@@ -12,6 +13,7 @@ const HomePage: React.FC = () => {
   const dispatch = useAppDispatch();
   const { items: notes, loading, error } = useAppSelector(state => state.notes);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [noteToDelete, setNoteToDelete] = useState<{ id: string; title: string } | null>(null);
 
   useEffect(() => {
     dispatch(fetchAllNotes());
@@ -27,6 +29,27 @@ const HomePage: React.FC = () => {
       setIsCreateModalOpen(false);
       dispatch(fetchAllNotes());
     }
+  };
+
+  const handleDeleteClick = (id: string) => {
+    const note = notes.find(n => n.id === id);
+    if (note) {
+      setNoteToDelete({ id: note.id, title: note.title });
+    }
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (noteToDelete) {
+      const result = await dispatch(deleteNote(noteToDelete.id));
+      if (deleteNote.fulfilled.match(result)) {
+        setNoteToDelete(null);
+        dispatch(fetchAllNotes());
+      }
+    }
+  };
+
+  const handleDeleteCancel = () => {
+    setNoteToDelete(null);
   };
 
   return (
@@ -61,6 +84,17 @@ const HomePage: React.FC = () => {
         error={error}
       />
 
+      <ConfirmModal
+        isOpen={!!noteToDelete}
+        onClose={handleDeleteCancel}
+        onConfirm={handleDeleteConfirm}
+        title="Delete Note"
+        message={`Are you sure you want to delete "${noteToDelete?.title}"? This action cannot be undone.`}
+        confirmText="Delete"
+        cancelText="Cancel"
+        loading={loading}
+      />
+
       {loading && (
         <div className="loading">Loading notes...</div>
       )}
@@ -77,7 +111,11 @@ const HomePage: React.FC = () => {
             <ul className="notes-list">
               {notes.map((note: Note) => (
                 <li key={note.id} className="notes-list-item">
-                  <NoteCard note={note} />
+                  <NoteCard 
+                    note={note} 
+                    onDelete={handleDeleteClick}
+                    isDeleting={loading}
+                  />
                 </li>
               ))}
             </ul>

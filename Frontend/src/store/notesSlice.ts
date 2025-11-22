@@ -46,6 +46,20 @@ export const createNote = createAsyncThunk(
   }
 );
 
+export const deleteNote = createAsyncThunk(
+  "notes/delete",
+  async (id: string, { rejectWithValue }) => {
+    try {
+      await noteService.remove(id);
+      return id;
+    } catch (error) {
+      return rejectWithValue(
+        error instanceof Error ? error.message : "Failed to delete note"
+      );
+    }
+  }
+);
+
 const notesSlice = createSlice({
   name: "notes",
   initialState,
@@ -80,6 +94,18 @@ const notesSlice = createSlice({
         state.items.push(action.payload);
       })
       .addCase(createNote.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+      .addCase(deleteNote.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(deleteNote.fulfilled, (state, action) => {
+        state.loading = false;
+        state.items = state.items.filter(note => note.id !== action.payload);
+      })
+      .addCase(deleteNote.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       });
