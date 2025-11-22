@@ -14,5 +14,6 @@ public class NotesManagerDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+        DataSeeder.SeedNotes(modelBuilder);
     }
 }
