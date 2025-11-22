@@ -1,4 +1,4 @@
-import { apiClient } from "./apiClient";
+import { apiClient } from "./apiClient.ts";
 import type { Note } from "../types/note";
 
 export const noteService = {
