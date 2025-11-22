@@ -3,6 +3,7 @@ import './HomePage.scss';
 import { useAppDispatch, useAppSelector } from '../../hooks/useAppDispatch';
 import { fetchAllNotes } from '../../store/notesSlice';
 import type { Note } from '../../types/note';
+import { NoteCard } from '../../components/note-card/NoteCard';
 import refreshIcon from '../../assets/refresh-page-option.png';
 
 const HomePage: React.FC = () => {
@@ -46,10 +47,8 @@ const HomePage: React.FC = () => {
           ) : (
             <ul className="notes-list">
               {notes.map((note: Note) => (
-                <li key={note.id} className="note-item">
-                  <h3>{note.title}</h3>
-                  <p>{note.content}</p>
-                  <small>{new Date(note.createdAt).toLocaleDateString()}</small>
+                <li key={note.id} className="notes-list-item">
+                  <NoteCard note={note} />
                 </li>
               ))}
             </ul>

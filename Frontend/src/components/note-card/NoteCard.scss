@@ -1,0 +1,45 @@
+.note-card {
+  padding: 1.5rem;
+  background-color: #fff;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  height: 180px;
+
+  &:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-color: #dee2e6;
+    transform: translateY(-2px);
+  }
+}
+
+.note-card-title {
+  margin: 0;
+  font-size: 1.25rem;
+  color: #212529;
+  word-break: break-word;
+  flex-shrink: 0;
+}
+
+.note-card-content {
+  margin: 0;
+  color: #495057;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  word-break: break-word;
+  flex: 1;
+  overflow: hidden;
+}
+
+.note-card-date {
+  color: #868e96;
+  font-size: 0.85rem;
+  display: block;
+  margin-top: auto;
+  flex-shrink: 0;
+}
