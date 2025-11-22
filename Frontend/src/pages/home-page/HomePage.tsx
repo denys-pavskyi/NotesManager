@@ -110,11 +110,11 @@ const HomePage: React.FC = () => {
       />
 
       {loading && (
-        <div className="loading">Loading notes...</div>
+        <div className="loading" data-testid="loading">Loading notes...</div>
       )}
 
       {error && (
-        <div className="error">Error: {error}</div>
+        <div className="error" data-testid="error">Error: {error}</div>
       )}
 
       {!loading && !error && (
