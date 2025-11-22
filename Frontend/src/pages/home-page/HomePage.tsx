@@ -4,8 +4,7 @@ import { useAppDispatch, useAppSelector } from '../../hooks/useAppDispatch';
 import { fetchAllNotes, createNote, deleteNote, updateNote } from '../../store/notesSlice';
 import type { Note } from '../../types/note';
 import { NoteCard } from '../../components/note-card/NoteCard';
-import { CreateNoteModal } from '../../components/create-note-modal/CreateNoteModal';
-import { EditNoteModal } from '../../components/edit-note-modal/EditNoteModal';
+import { NoteFormModal } from '../../components/note-form/NoteFormModal';
 import { ConfirmModal } from '../../components/confirm-modal/ConfirmModal';
 import refreshIcon from '../../assets/refresh-page-option.png';
 import addPostIcon from '../../assets/add-post.png';
@@ -25,49 +24,35 @@ const HomePage: React.FC = () => {
     dispatch(fetchAllNotes());
   };
 
-  const handleCreateNote = async (title: string, content: string) => {
-    const result = await dispatch(createNote({ title, content }));
-    if (createNote.fulfilled.match(result)) {
-      setIsCreateModalOpen(false);
+  const handleFormSubmit = async (title: string, content: string, note?: Note) => {
+    const action = note
+      ? updateNote({ id: note.id, title, content, createdAt: note.createdAt, updatedAt: note.updatedAt })
+      : createNote({ title, content });
+    
+    const result = await dispatch(action);
+    
+    if ((note ? updateNote : createNote).fulfilled.match(result)) {
+      if (note) {
+        setNoteToEdit(null);
+      } else {
+        setIsCreateModalOpen(false);
+      }
       dispatch(fetchAllNotes());
     }
   };
 
   const handleDeleteClick = (id: string) => {
     const note = notes.find(n => n.id === id);
-    if (note) {
-      setNoteToDelete({ id: note.id, title: note.title });
-    }
+    if (note) setNoteToDelete({ id: note.id, title: note.title });
   };
 
   const handleDeleteConfirm = async () => {
-    if (noteToDelete) {
-      const result = await dispatch(deleteNote(noteToDelete.id));
-      if (deleteNote.fulfilled.match(result)) {
-        setNoteToDelete(null);
-        dispatch(fetchAllNotes());
-      }
-    }
-  };
-
-  const handleDeleteCancel = () => {
-    setNoteToDelete(null);
-  };
-
-  const handleEditClick = (note: Note) => {
-    setNoteToEdit(note);
-  };
-
-  const handleUpdateNote = async (id: string, title: string, content: string, createdAt: string, updatedAt?: string | null) => {
-    const result = await dispatch(updateNote({ id, title, content, createdAt, updatedAt }));
-    if (updateNote.fulfilled.match(result)) {
-      setNoteToEdit(null);
+    if (!noteToDelete) return;
+    const result = await dispatch(deleteNote(noteToDelete.id));
+    if (deleteNote.fulfilled.match(result)) {
+      setNoteToDelete(null);
       dispatch(fetchAllNotes());
     }
-  };
-
-  const handleEditCancel = () => {
-    setNoteToEdit(null);
   };
 
   return (
@@ -94,26 +79,28 @@ const HomePage: React.FC = () => {
         <span>Create Note</span>
       </button>
 
-      <CreateNoteModal
+      <NoteFormModal
         isOpen={isCreateModalOpen}
         onClose={() => setIsCreateModalOpen(false)}
-        onSubmit={handleCreateNote}
+        onSubmit={handleFormSubmit}
         loading={loading}
         error={error}
+        mode="create"
       />
 
-      <EditNoteModal
+      <NoteFormModal
         isOpen={!!noteToEdit}
-        onClose={handleEditCancel}
-        onSubmit={handleUpdateNote}
+        onClose={() => setNoteToEdit(null)}
+        onSubmit={handleFormSubmit}
         note={noteToEdit}
         loading={loading}
         error={error}
+        mode="edit"
       />
 
       <ConfirmModal
         isOpen={!!noteToDelete}
-        onClose={handleDeleteCancel}
+        onClose={() => setNoteToDelete(null)}
         onConfirm={handleDeleteConfirm}
         title="Delete Note"
         message={`Are you sure you want to delete "${noteToDelete?.title}"? This action cannot be undone.`}
@@ -141,7 +128,7 @@ const HomePage: React.FC = () => {
                   <NoteCard 
                     note={note} 
                     onDelete={handleDeleteClick}
-                    onEdit={handleEditClick}
+                    onEdit={(note) => setNoteToEdit(note)}
                     isDeleting={loading}
                   />
                 </li>

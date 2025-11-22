@@ -1,4 +1,4 @@
-.edit-note-modal-overlay {
+.note-form-modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -21,7 +21,7 @@
   }
 }
 
-.edit-note-modal {
+.note-form-modal {
   background-color: #fff;
   border-radius: 8px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
@@ -43,7 +43,7 @@
   }
 }
 
-.edit-note-modal-header {
+.note-form-modal-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -57,7 +57,7 @@
   }
 }
 
-.edit-note-modal-close {
+.note-form-modal-close {
   background: none;
   border: none;
   font-size: 1.5rem;
@@ -79,7 +79,7 @@
   }
 }
 
-.edit-note-form {
+.note-form-form {
   padding: 1.5rem;
   display: flex;
   flex-direction: column;
@@ -221,12 +221,12 @@
 }
 
 @media (max-width: 768px) {
-  .edit-note-modal {
+  .note-form-modal {
     width: 95%;
     margin: 1rem;
   }
 
-  .edit-note-modal-header {
+  .note-form-modal-header {
     padding: 1rem;
 
     h2 {
@@ -234,7 +234,7 @@
     }
   }
 
-  .edit-note-form {
+  .note-form-form {
     padding: 1rem;
   }
 }
