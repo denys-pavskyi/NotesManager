@@ -1,0 +1,47 @@
+{
+  "common": {
+    "cancel": "Cancel",
+    "close": "Close",
+    "delete": "Delete",
+    "confirm": "Confirm",
+    "save": "Save",
+    "create": "Create",
+    "edit": "Edit",
+    "loading": "Loading...",
+    "processing": "Processing...",
+    "error": "Error",
+    "home": "Home",
+    "status": "Status",
+    "collapse": "Collapse",
+    "showDetails": "Show details",
+    "validationErrors": "Validation Errors"
+  },
+  "notes": {
+    "title": "Notes",
+    "createNote": "Create Note",
+    "createNewNote": "Create New Note",
+    "editNote": "Edit Note",
+    "deleteNote": "Delete Note",
+    "refreshNotes": "Refresh notes",
+    "createNewNoteTooltip": "Create new note",
+    "noNotes": "No notes yet. Create your first note!",
+    "loadingNotes": "Loading notes...",
+    "deleteConfirmation": "Are you sure you want to delete \"{{title}}\"? This action cannot be undone.",
+    "creating": "Creating...",
+    "saving": "Saving...",
+    "saveChanges": "Save Changes"
+  },
+  "form": {
+    "title": "Title",
+    "content": "Content",
+    "enterNoteTitle": "Enter note title",
+    "enterNoteContent": "Enter note content"
+  },
+  "validation": {
+    "titleRequired": "Title is required",
+    "titleMaxLength": "Title must be no more than {{max}} characters",
+    "contentRequired": "Content is required",
+    "contentMaxLength": "Content must be no more than {{max}} characters"
+  }
+}
+

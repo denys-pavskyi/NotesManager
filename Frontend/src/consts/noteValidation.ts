@@ -1,3 +1,5 @@
+import i18n from '../i18n/config';
+
 export const MAX_TITLE_LENGTH = 40;
 export const MAX_CONTENT_LENGTH = 1000;
 
@@ -8,20 +10,20 @@ export interface NoteValidationErrors {
 
 export const validateNoteTitle = (title: string): string | undefined => {
   if (!title.trim()) {
-    return 'Title is required';
+    return i18n.t('validation.titleRequired');
   }
   if (title.length > MAX_TITLE_LENGTH) {
-    return `Title must be no more than ${MAX_TITLE_LENGTH} characters`;
+    return i18n.t('validation.titleMaxLength', { max: MAX_TITLE_LENGTH });
   }
   return undefined;
 };
 
 export const validateNoteContent = (content: string): string | undefined => {
   if (!content.trim()) {
-    return 'Content is required';
+    return i18n.t('validation.contentRequired');
   }
   if (content.length > MAX_CONTENT_LENGTH) {
-    return `Content must be no more than ${MAX_CONTENT_LENGTH} characters`;
+    return i18n.t('validation.contentMaxLength', { max: MAX_CONTENT_LENGTH });
   }
   return undefined;
 };

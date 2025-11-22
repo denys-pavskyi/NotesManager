@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import './HomePage.scss';
 import { useAppDispatch, useAppSelector } from '../../hooks/useAppDispatch';
 import { fetchAllNotes, createNote, deleteNote, updateNote } from '../../store/notesSlice';
@@ -10,6 +11,7 @@ import refreshIcon from '../../assets/refresh-page-option.png';
 import addPostIcon from '../../assets/add-post.png';
 
 const HomePage: React.FC = () => {
+  const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const { items: notes, loading, error } = useAppSelector(state => state.notes);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
@@ -61,22 +63,22 @@ const HomePage: React.FC = () => {
         <button 
           className="refresh-button" 
           onClick={handleRefresh}
-          title="Refresh notes"
+          title={t('notes.refreshNotes')}
           disabled={loading}
         >
-          <img src={refreshIcon} alt="Refresh" className="refresh-icon" />
+          <img src={refreshIcon} alt={t('notes.refreshNotes')} className="refresh-icon" />
         </button>
-        <h2>Notes ({notes.length})</h2>
+        <h2>{t('notes.title')} ({notes.length})</h2>
       </div>
 
       <button
         className="create-note-button"
         onClick={() => setIsCreateModalOpen(true)}
-        title="Create new note"
+        title={t('notes.createNewNoteTooltip')}
         disabled={loading}
       >
-        <img src={addPostIcon} alt="Create note" className="create-note-icon" />
-        <span>Create Note</span>
+        <img src={addPostIcon} alt={t('notes.createNote')} className="create-note-icon" />
+        <span>{t('notes.createNote')}</span>
       </button>
 
       <NoteFormModal
@@ -102,25 +104,25 @@ const HomePage: React.FC = () => {
         isOpen={!!noteToDelete}
         onClose={() => setNoteToDelete(null)}
         onConfirm={handleDeleteConfirm}
-        title="Delete Note"
-        message={`Are you sure you want to delete "${noteToDelete?.title}"? This action cannot be undone.`}
-        confirmText="Delete"
-        cancelText="Cancel"
+        title={t('notes.deleteNote')}
+        message={t('notes.deleteConfirmation', { title: noteToDelete?.title })}
+        confirmText={t('common.delete')}
+        cancelText={t('common.cancel')}
         loading={loading}
       />
 
       {loading && (
-        <div className="loading" data-testid="loading">Loading notes...</div>
+        <div className="loading" data-testid="loading">{t('notes.loadingNotes')}</div>
       )}
 
       {error && (
-        <div className="error" data-testid="error">Error: {error}</div>
+        <div className="error" data-testid="error">{t('common.error')}: {error}</div>
       )}
 
       {!loading && !error && (
         <>
           {notes.length === 0 ? (
-            <p className="no-notes">No notes yet. Create your first note!</p>
+            <p className="no-notes">{t('notes.noNotes')}</p>
           ) : (
             <ul className="notes-list">
               {notes.map((note: Note) => (

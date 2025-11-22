@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import './NoteFormModal.scss';
 import type { Note } from '../../types/note';
 import { NoteFormField } from './NoteFormField';
@@ -29,6 +30,7 @@ export const NoteFormModal: React.FC<NoteFormModalProps> = ({
   error = null,
   mode,
 }) => {
+  const { t } = useTranslation();
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [validationErrors, setValidationErrors] = useState<NoteValidationErrors>({});
@@ -85,10 +87,10 @@ export const NoteFormModal: React.FC<NoteFormModalProps> = ({
     }
   };
 
-  const modalTitle = mode === 'create' ? 'Create New Note' : 'Edit Note';
+  const modalTitle = mode === 'create' ? t('notes.createNewNote') : t('notes.editNote');
   const submitText = loading 
-    ? (mode === 'create' ? 'Creating...' : 'Saving...')
-    : (mode === 'create' ? 'Create Note' : 'Save Changes');
+    ? (mode === 'create' ? t('notes.creating') : t('notes.saving'))
+    : (mode === 'create' ? t('notes.createNote') : t('notes.saveChanges'));
   const isSubmitDisabled = loading || !isNoteFormValid(title, content);
   const textareaRows = mode === 'edit' ? 8 : 6;
 
@@ -101,7 +103,7 @@ export const NoteFormModal: React.FC<NoteFormModalProps> = ({
             className="note-form-modal-close"
             onClick={handleClose}
             disabled={loading}
-            title="Close"
+            title={t('common.close')}
           >
             ✕
           </button>
@@ -109,24 +111,24 @@ export const NoteFormModal: React.FC<NoteFormModalProps> = ({
         <form onSubmit={handleSubmit} className="note-form-form">
           <NoteFormField
             id={`note-${mode}-title`}
-            label="Title"
+            label={t('form.title')}
             value={title}
             onChange={setTitle}
             maxLength={MAX_TITLE_LENGTH}
             error={validationErrors.title}
             disabled={loading}
-            placeholder="Enter note title"
+            placeholder={t('form.enterNoteTitle')}
             type="text"
           />
           <NoteFormField
             id={`note-${mode}-content`}
-            label="Content"
+            label={t('form.content')}
             value={content}
             onChange={setContent}
             maxLength={MAX_CONTENT_LENGTH}
             error={validationErrors.content}
             disabled={loading}
-            placeholder="Enter note content"
+            placeholder={t('form.enterNoteContent')}
             rows={textareaRows}
             type="textarea"
           />
@@ -143,7 +145,7 @@ export const NoteFormModal: React.FC<NoteFormModalProps> = ({
               disabled={loading}
               className="cancel-button"
             >
-              Cancel
+              {t('common.cancel')}
             </button>
             <button
               type="submit"

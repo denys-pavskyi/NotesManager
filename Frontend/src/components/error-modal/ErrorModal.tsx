@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useError } from "../../contexts/ErrorContext";
 import "./ErrorModal.scss";
 
 export function ErrorModal() {
+  const { t } = useTranslation();
   const { error, clearError } = useError();
   const [isExpanded, setIsExpanded] = useState(false);
 
@@ -27,7 +29,7 @@ export function ErrorModal() {
               {error.getValidationErrors().length > 2 && "..."}
             </p>
           )}
-          <p className="error-toast-code">Status: {error.statusCode}</p>
+          <p className="error-toast-code">{t('common.status')}: {error.statusCode}</p>
         </div>
       </div>
 
@@ -35,7 +37,7 @@ export function ErrorModal() {
         <div className="error-toast-details-panel">
           {error.hasValidationErrors() && (
             <div className="error-detail-section">
-              <strong>Validation Errors:</strong>
+              <strong>{t('common.validationErrors')}:</strong>
               <ul>
                 {error.getValidationErrors().map((err, index) => (
                   <li key={index}>{err}</li>
@@ -56,7 +58,7 @@ export function ErrorModal() {
           <button
             className="error-toast-expand"
             onClick={() => setIsExpanded(!isExpanded)}
-            title={isExpanded ? "Collapse" : "Show details"}
+            title={isExpanded ? t('common.collapse') : t('common.showDetails')}
           >
             {isExpanded ? "▲" : "▼"}
           </button>

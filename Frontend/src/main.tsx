@@ -6,6 +6,7 @@ import { Provider } from "react-redux";
 import { App } from "./App";
 import { store } from "./store/store";
 import { ErrorProvider } from "./contexts/ErrorContext";
+import "./i18n/config";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
