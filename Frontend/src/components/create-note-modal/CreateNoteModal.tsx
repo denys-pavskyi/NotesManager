@@ -9,6 +9,9 @@ interface CreateNoteModalProps {
   error?: string | null;
 }
 
+const MAX_TITLE_LENGTH = 40;
+const MAX_CONTENT_LENGTH = 1000;
+
 export const CreateNoteModal: React.FC<CreateNoteModalProps> = ({
   isOpen,
   onClose,
@@ -18,23 +21,56 @@ export const CreateNoteModal: React.FC<CreateNoteModalProps> = ({
 }) => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
+  const [validationErrors, setValidationErrors] = useState<{
+    title?: string;
+    content?: string;
+  }>({});
 
-  // Clear form only when modal closes (happens on success or manual close)
-  // This preserves form data when there's an error
   useEffect(() => {
     if (!isOpen) {
       setTitle('');
       setContent('');
+      setValidationErrors({});
     }
   }, [isOpen]);
 
+  useEffect(() => {
+    if (validationErrors.title && title.trim().length > 0 && title.length <= MAX_TITLE_LENGTH) {
+      setValidationErrors(prev => ({ ...prev, title: undefined }));
+    }
+  }, [title, validationErrors.title]);
+
+  useEffect(() => {
+    if (validationErrors.content && content.trim().length > 0 && content.length <= MAX_CONTENT_LENGTH) {
+      setValidationErrors(prev => ({ ...prev, content: undefined }));
+    }
+  }, [content, validationErrors.content]);
+
   if (!isOpen) return null;
+
+  const validateForm = (): boolean => {
+    const errors: { title?: string; content?: string } = {};
+
+    if (!title.trim()) {
+      errors.title = 'Title is required';
+    } else if (title.length > MAX_TITLE_LENGTH) {
+      errors.title = `Title must be no more than ${MAX_TITLE_LENGTH} characters`;
+    }
+
+    if (!content.trim()) {
+      errors.content = 'Content is required';
+    } else if (content.length > MAX_CONTENT_LENGTH) {
+      errors.content = `Content must be no more than ${MAX_CONTENT_LENGTH} characters`;
+    }
+
+    setValidationErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (title.trim() && content.trim()) {
+    if (validateForm()) {
       onSubmit(title.trim(), content.trim());
-      // Don't clear form here - wait for success
     }
   };
 
@@ -60,28 +96,46 @@ export const CreateNoteModal: React.FC<CreateNoteModalProps> = ({
         </div>
         <form onSubmit={handleSubmit} className="create-note-form">
           <div className="form-group">
-            <label htmlFor="note-title">Title</label>
+            <label htmlFor="note-title">
+              Title
+              <span className="char-count">
+                {title.length}/{MAX_TITLE_LENGTH}
+              </span>
+            </label>
             <input
               id="note-title"
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="Enter note title"
-              required
+              maxLength={MAX_TITLE_LENGTH}
               disabled={loading}
+              className={validationErrors.title ? 'error' : ''}
             />
+            {validationErrors.title && (
+              <span className="field-error">{validationErrors.title}</span>
+            )}
           </div>
           <div className="form-group">
-            <label htmlFor="note-content">Content</label>
+            <label htmlFor="note-content">
+              Content
+              <span className="char-count">
+                {content.length}/{MAX_CONTENT_LENGTH}
+              </span>
+            </label>
             <textarea
               id="note-content"
               value={content}
               onChange={(e) => setContent(e.target.value)}
               placeholder="Enter note content"
               rows={6}
-              required
+              maxLength={MAX_CONTENT_LENGTH}
               disabled={loading}
+              className={validationErrors.content ? 'error' : ''}
             />
+            {validationErrors.content && (
+              <span className="field-error">{validationErrors.content}</span>
+            )}
           </div>
           {error && (
             <div className="form-error">
@@ -100,7 +154,7 @@ export const CreateNoteModal: React.FC<CreateNoteModalProps> = ({
             </button>
             <button
               type="submit"
-              disabled={loading || !title.trim() || !content.trim()}
+              disabled={loading || !title.trim() || !content.trim() || title.length > MAX_TITLE_LENGTH || content.length > MAX_CONTENT_LENGTH}
               className="submit-button"
             >
               {loading ? 'Creating...' : 'Create Note'}

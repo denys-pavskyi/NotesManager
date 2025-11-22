@@ -95,6 +95,15 @@
     font-weight: 500;
     color: #495057;
     font-size: 0.95rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .char-count {
+    font-weight: 400;
+    font-size: 0.85rem;
+    color: #6c757d;
   }
 
   input,
@@ -112,6 +121,15 @@
       box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.1);
     }
 
+    &.error {
+      border-color: #c41e3a;
+      
+      &:focus {
+        border-color: #c41e3a;
+        box-shadow: 0 0 0 3px rgba(196, 30, 58, 0.1);
+      }
+    }
+
     &:disabled {
       background-color: #f8f9fa;
       cursor: not-allowed;
@@ -121,6 +139,12 @@
     &::placeholder {
       color: #adb5bd;
     }
+  }
+
+  .field-error {
+    color: #c41e3a;
+    font-size: 0.85rem;
+    margin-top: -0.25rem;
   }
 
   textarea {
