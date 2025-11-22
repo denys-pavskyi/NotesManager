@@ -44,7 +44,6 @@ public class NoteService : INoteService
     {
         var note = _mapper.Map<Note>(noteCreateRequest);
 
-        //note.Id = Guid.NewGuid();
         var dateOfCreation = DateTime.UtcNow;
         note.CreatedAt = dateOfCreation;
         note.UpdatedAt = dateOfCreation;
@@ -87,22 +86,27 @@ public class NoteService : INoteService
         }
         return Result<NoteDto>.Fail(
             ErrorType.Internal, 
-            "Failed to update note.");
+            "Failed to update note");
     }
 
-    public async Task<Result<bool>> RemoveAsync(Guid id)
+    public async Task<Result<NoteDto>> RemoveAsync(Guid id)
     {
         var note = await _repositoryWrapper.NoteRepository.GetByIdAsync(id);
         if (note == null)
         {
-            return Result<bool>.Fail(ErrorType.NotFound, "Note not found.");
+            return Result<NoteDto>.Fail(
+                ErrorType.NotFound, 
+                "Note not found");
         }
         _repositoryWrapper.NoteRepository.Remove(note);
         var resultIsSuccess = await _repositoryWrapper.SaveChangesAsync() > 0;
         if (resultIsSuccess)
         {
-            return Result<bool>.Ok(true);
+            var noteDto = _mapper.Map<NoteDto>(note);
+            return Result<NoteDto>.Ok(noteDto);
         }
-        return Result<bool>.Fail(ErrorType.Internal, "Failed to remove note.");
+        return Result<NoteDto>.Fail(
+            ErrorType.Internal, 
+            "Failed to remove note");
     }
 }

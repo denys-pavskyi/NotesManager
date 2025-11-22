@@ -10,5 +10,5 @@ public interface INoteService
     Task<Result<List<NoteDto>>> GetAllAsync();
     Task<Result<NoteDto>> AddAsync(CreateNoteRequest noteCreateRequest);
     Task<Result<NoteDto>> UpdateAsync(Guid noteId, UpdateNoteRequest noteUpdateRequest);
-    Task<Result<bool>> RemoveAsync(Guid id);
+    Task<Result<NoteDto>> RemoveAsync(Guid id);
 }
