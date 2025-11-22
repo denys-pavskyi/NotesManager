@@ -17,7 +17,7 @@ export const noteService = {
     return data;
   },
 
-  async update(id: string, payload: { title: string; content: string }): Promise<Note> {
+  async update(id: string, payload: { title: string; content: string; createdAt: string; updatedAt?: string | null }): Promise<Note> {
     const { data } = await apiClient.put<Note>(`/Notes/${id}`, payload);
     return data;
   },

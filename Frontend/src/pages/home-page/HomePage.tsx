@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import './HomePage.scss';
 import { useAppDispatch, useAppSelector } from '../../hooks/useAppDispatch';
-import { fetchAllNotes, createNote, deleteNote } from '../../store/notesSlice';
+import { fetchAllNotes, createNote, deleteNote, updateNote } from '../../store/notesSlice';
 import type { Note } from '../../types/note';
 import { NoteCard } from '../../components/note-card/NoteCard';
 import { CreateNoteModal } from '../../components/create-note-modal/CreateNoteModal';
+import { EditNoteModal } from '../../components/edit-note-modal/EditNoteModal';
 import { ConfirmModal } from '../../components/confirm-modal/ConfirmModal';
 import refreshIcon from '../../assets/refresh-page-option.png';
 import addPostIcon from '../../assets/add-post.png';
@@ -13,6 +14,7 @@ const HomePage: React.FC = () => {
   const dispatch = useAppDispatch();
   const { items: notes, loading, error } = useAppSelector(state => state.notes);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [noteToEdit, setNoteToEdit] = useState<Note | null>(null);
   const [noteToDelete, setNoteToDelete] = useState<{ id: string; title: string } | null>(null);
 
   useEffect(() => {
@@ -52,6 +54,22 @@ const HomePage: React.FC = () => {
     setNoteToDelete(null);
   };
 
+  const handleEditClick = (note: Note) => {
+    setNoteToEdit(note);
+  };
+
+  const handleUpdateNote = async (id: string, title: string, content: string, createdAt: string, updatedAt?: string | null) => {
+    const result = await dispatch(updateNote({ id, title, content, createdAt, updatedAt }));
+    if (updateNote.fulfilled.match(result)) {
+      setNoteToEdit(null);
+      dispatch(fetchAllNotes());
+    }
+  };
+
+  const handleEditCancel = () => {
+    setNoteToEdit(null);
+  };
+
   return (
     <div className="home-page">
       <div className="home-page-header">
@@ -80,6 +98,15 @@ const HomePage: React.FC = () => {
         isOpen={isCreateModalOpen}
         onClose={() => setIsCreateModalOpen(false)}
         onSubmit={handleCreateNote}
+        loading={loading}
+        error={error}
+      />
+
+      <EditNoteModal
+        isOpen={!!noteToEdit}
+        onClose={handleEditCancel}
+        onSubmit={handleUpdateNote}
+        note={noteToEdit}
         loading={loading}
         error={error}
       />
@@ -114,6 +141,7 @@ const HomePage: React.FC = () => {
                   <NoteCard 
                     note={note} 
                     onDelete={handleDeleteClick}
+                    onEdit={handleEditClick}
                     isDeleting={loading}
                   />
                 </li>

@@ -46,6 +46,25 @@ export const createNote = createAsyncThunk(
   }
 );
 
+export const updateNote = createAsyncThunk(
+  "notes/update",
+  async (payload: { id: string; title: string; content: string; createdAt: string; updatedAt?: string | null }, { rejectWithValue }) => {
+    try {
+      const note = await noteService.update(payload.id, {
+        title: payload.title,
+        content: payload.content,
+        createdAt: payload.createdAt,
+        updatedAt: payload.updatedAt,
+      });
+      return note;
+    } catch (error) {
+      return rejectWithValue(
+        error instanceof Error ? error.message : "Failed to update note"
+      );
+    }
+  }
+);
+
 export const deleteNote = createAsyncThunk(
   "notes/delete",
   async (id: string, { rejectWithValue }) => {
@@ -94,6 +113,21 @@ const notesSlice = createSlice({
         state.items.push(action.payload);
       })
       .addCase(createNote.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+      .addCase(updateNote.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updateNote.fulfilled, (state, action) => {
+        state.loading = false;
+        const index = state.items.findIndex(note => note.id === action.payload.id);
+        if (index !== -1) {
+          state.items[index] = action.payload;
+        }
+      })
+      .addCase(updateNote.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       })

@@ -6,12 +6,13 @@ import binIcon from '../../assets/bin.png';
 interface NoteCardProps {
   note: Note;
   onDelete?: (id: string) => void;
+  onEdit?: (note: Note) => void;
   isDeleting?: boolean;
 }
 
 const CONTENT_PREVIEW_LENGTH = 150;
 
-export const NoteCard: React.FC<NoteCardProps> = ({ note, onDelete, isDeleting = false }) => {
+export const NoteCard: React.FC<NoteCardProps> = ({ note, onDelete, onEdit, isDeleting = false }) => {
   const contentPreview = note.content.length > CONTENT_PREVIEW_LENGTH 
     ? note.content.substring(0, CONTENT_PREVIEW_LENGTH) + '...'
     : note.content;
@@ -23,8 +24,14 @@ export const NoteCard: React.FC<NoteCardProps> = ({ note, onDelete, isDeleting =
     }
   };
 
+  const handleCardClick = () => {
+    if (onEdit && !isDeleting) {
+      onEdit(note);
+    }
+  };
+
   return (
-    <div className="note-card">
+    <div className="note-card" onClick={handleCardClick}>
       <div className="note-card-header">
         <h3 className="note-card-title">{note.title}</h3>
         {onDelete && (
