@@ -3,6 +3,12 @@
   flex-direction: column;
   gap: 2rem;
 
+  .home-page-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
   h2 {
     font-size: 1.75rem;
     margin: 0;
@@ -31,6 +37,39 @@
   .no-notes {
     background-color: #f5f5f5;
     color: #666;
+  }
+
+  .refresh-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    &:hover:not(:disabled) {
+      background-color: rgba(0, 0, 0, 0.05);
+      transform: rotate(-10deg);
+    }
+
+    &:active:not(:disabled) {
+      transform: rotate(-10deg) scale(0.95);
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+
+  .refresh-icon {
+    width: 24px;
+    height: 24px;
+    display: block;
   }
 
   .notes-list {
