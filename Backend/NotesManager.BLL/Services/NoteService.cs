@@ -40,12 +40,14 @@ public class NoteService : INoteService
         return Result<List<NoteDto>>.Ok(dtos);
     }
 
-    public async Task<Result<NoteDto>> AddAsync(NoteDto noteDto)
+    public async Task<Result<NoteDto>> AddAsync(CreateNoteRequest noteCreateRequest)
     {
-        var note = _mapper.Map<Note>(noteDto);
+        var note = _mapper.Map<Note>(noteCreateRequest);
 
-        note.Id = Guid.NewGuid();
-        note.CreatedAt = DateTime.UtcNow;
+        //note.Id = Guid.NewGuid();
+        var dateOfCreation = DateTime.UtcNow;
+        note.CreatedAt = dateOfCreation;
+        note.UpdatedAt = dateOfCreation;
 
         await _repositoryWrapper.NoteRepository.AddAsync(note);
 
@@ -60,7 +62,7 @@ public class NoteService : INoteService
             "Failed to add note");
     }
 
-    public async Task<Result<NoteDto>> UpdateAsync(Guid noteId, UpdateNoteRequest noteDto)
+    public async Task<Result<NoteDto>> UpdateAsync(Guid noteId, UpdateNoteRequest noteUpdateRequest)
     {
         var note = await _repositoryWrapper.NoteRepository.GetByIdAsync(noteId);
         if (note == null)
@@ -70,8 +72,9 @@ public class NoteService : INoteService
                 "Note was not found"
                 );
         }
-        note.Title = noteDto.Title;
-        note.Content = noteDto.Content;
+
+        note.Title = noteUpdateRequest.Title;
+        note.Content = noteUpdateRequest.Content;
         note.UpdatedAt = DateTime.UtcNow;
 
         _repositoryWrapper.NoteRepository.Update(note);

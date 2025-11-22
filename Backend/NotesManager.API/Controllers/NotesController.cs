@@ -16,15 +16,18 @@ namespace NotesManager.API.Controllers
     {
         private readonly INoteService _noteService;
         private readonly IValidator<NoteDto> _noteDtoValidator;
+        private readonly IValidator<CreateNoteRequest> _createNoteRequestValidator;
         private readonly IValidator<UpdateNoteRequest> _updateNoteRequestValidator;
 
         public NotesController(
             INoteService noteService,
             IValidator<NoteDto> noteDtoValidator,
+            IValidator<CreateNoteRequest> createNoteRequestValidator,
             IValidator<UpdateNoteRequest> updateNoteRequestValidator)
         {
             _noteService = noteService;
             _noteDtoValidator = noteDtoValidator;
+            _createNoteRequestValidator = createNoteRequestValidator;
             _updateNoteRequestValidator = updateNoteRequestValidator;
         }
 
@@ -43,13 +46,13 @@ namespace NotesManager.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] NoteDto noteDto)
+        public async Task<IActionResult> Create([FromBody] CreateNoteRequest noteCreateRequest)
         {
-            var validationError = await noteDto.ValidateAsync(_noteDtoValidator);
+            var validationError = await noteCreateRequest.ValidateAsync(_createNoteRequestValidator);
             if (validationError != null)
                 return BadRequest(validationError);
 
-            var result = await _noteService.AddAsync(noteDto);
+            var result = await _noteService.AddAsync(noteCreateRequest);
             return result.ToActionResult();
         }
 
