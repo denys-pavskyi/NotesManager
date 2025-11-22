@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import type { Note } from '../../types/note';
 import './NoteCard.scss';
 
@@ -9,14 +9,6 @@ interface NoteCardProps {
 const CONTENT_PREVIEW_LENGTH = 150;
 
 export const NoteCard: React.FC<NoteCardProps> = ({ note }) => {
-  useEffect(() => {
-    console.log('Note:', {
-      title: note.title,
-      createdAt: note.createdAt,
-      updatedAt: note.updatedAt,
-    });
-  }, [note]);
-
   const contentPreview = note.content.length > CONTENT_PREVIEW_LENGTH 
     ? note.content.substring(0, CONTENT_PREVIEW_LENGTH) + '...'
     : note.content;

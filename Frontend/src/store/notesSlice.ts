@@ -32,6 +32,20 @@ export const fetchAllNotes = createAsyncThunk(
   }
 );
 
+export const createNote = createAsyncThunk(
+  "notes/create",
+  async (payload: { title: string; content: string }, { rejectWithValue }) => {
+    try {
+      const note = await noteService.create(payload);
+      return note;
+    } catch (error) {
+      return rejectWithValue(
+        error instanceof Error ? error.message : "Failed to create note"
+      );
+    }
+  }
+);
+
 const notesSlice = createSlice({
   name: "notes",
   initialState,
@@ -54,6 +68,18 @@ const notesSlice = createSlice({
         state.items = action.payload;
       })
       .addCase(fetchAllNotes.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+      .addCase(createNote.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(createNote.fulfilled, (state, action) => {
+        state.loading = false;
+        state.items.push(action.payload);
+      })
+      .addCase(createNote.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       });
