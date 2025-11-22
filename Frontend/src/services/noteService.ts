@@ -3,26 +3,26 @@ import type { Note } from "../types/note";
 
 export const noteService = {
   async getAll(): Promise<Note[]> {
-    const { data } = await apiClient.get<Note[]>("/api/Notes");
+    const { data } = await apiClient.get<Note[]>("/Notes");
     return data;
   },
 
   async getById(id: string): Promise<Note> {
-    const { data } = await apiClient.get<Note>(`/api/Notes/${id}`);
+    const { data } = await apiClient.get<Note>(`/Notes/${id}`);
     return data;
   },
 
   async create(payload: { title: string; content: string }): Promise<Note> {
-    const { data } = await apiClient.post<Note>("/api/Notes", payload);
+    const { data } = await apiClient.post<Note>("/Notes", payload);
     return data;
   },
 
   async update(id: string, payload: { title: string; content: string }): Promise<Note> {
-    const { data } = await apiClient.put<Note>(`/api/Notes/${id}`, payload);
+    const { data } = await apiClient.put<Note>(`/Notes/${id}`, payload);
     return data;
   },
 
   async remove(id: string): Promise<void> {
-    await apiClient.delete(`/api/Notes/${id}`);
+    await apiClient.delete(`/Notes/${id}`);
   },
 };

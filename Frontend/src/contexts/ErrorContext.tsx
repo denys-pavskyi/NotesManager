@@ -12,8 +12,13 @@ const ErrorContext = createContext<ErrorContextType | undefined>(undefined);
 export function ErrorProvider({ children }: { children: ReactNode }) {
   const [error, setError] = useState<ApiError | null>(null);
 
-  const showError = (error: ApiError) => setError(error);
-  const clearError = () => setError(null);
+  const showError = (error: ApiError) => {
+    setError(error);
+  };
+
+  const clearError = () => {
+    setError(null);
+  };
 
   return (
     <ErrorContext.Provider value={{ error, showError, clearError }}>
