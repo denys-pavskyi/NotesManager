@@ -9,6 +9,7 @@ using NotesManager.BLL.Validators.Notes;
 using NotesManager.DAL.Persistence;
 using NotesManager.DAL.Repositories.Interfaces;
 using NotesManager.DAL.Repositories.Realizations;
+using System;
 
 namespace NotesManager.API
 {
@@ -51,6 +52,13 @@ namespace NotesManager.API
             builder.Services.AddOpenApi();
 
             var app = builder.Build();
+
+            using (var scope = app.Services.CreateScope())
+            {
+                var db = scope.ServiceProvider.GetRequiredService<NotesManagerDbContext>();
+                db.Database.Migrate();
+            }
+
 
             // Configure the HTTP request pipeline.
             if (app.Environment.EnvironmentName == "Local")
