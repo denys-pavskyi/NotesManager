@@ -1,0 +1,46 @@
+{
+    "common": {
+      "cancel": "Скасувати",
+      "close": "Закрити",
+      "delete": "Видалити",
+      "confirm": "Підтвердити",
+      "save": "Зберегти",
+      "create": "Створити",
+      "edit": "Редагувати",
+      "loading": "Завантаження...",
+      "processing": "Обробка...",
+      "error": "Помилка",
+      "home": "Головна",
+      "status": "Статус",
+      "collapse": "Згорнути",
+      "showDetails": "Показати деталі",
+      "validationErrors": "Помилки валідації"
+    },
+    "notes": {
+      "title": "Нотатки",
+      "createNote": "Створити нотатку",
+      "createNewNote": "Створити нову нотатку",
+      "editNote": "Редагувати нотатку",
+      "deleteNote": "Видалити нотатку",
+      "refreshNotes": "Оновити нотатки",
+      "createNewNoteTooltip": "Створити нову нотатку",
+      "noNotes": "Поки що немає нотаток. Створіть першу!",
+      "loadingNotes": "Завантаження нотаток...",
+      "deleteConfirmation": "Ви впевнені, що хочете видалити «{{title}}»? Цю дію неможливо скасувати.",
+      "creating": "Створення...",
+      "saving": "Збереження...",
+      "saveChanges": "Зберегти зміни"
+    },
+    "form": {
+      "title": "Заголовок",
+      "content": "Вміст",
+      "enterNoteTitle": "Введіть заголовок нотатки",
+      "enterNoteContent": "Введіть вміст нотатки"
+    },
+    "validation": {
+      "titleRequired": "Заголовок є обов’язковим",
+      "titleMaxLength": "Заголовок має містити не більше ніж {{max}} символів",
+      "contentRequired": "Вміст є обов’язковим",
+      "contentMaxLength": "Вміст має містити не більше ніж {{max}} символів"
+    }
+  }
