@@ -16,6 +16,7 @@ services:
       - sqlserver
     networks:
       - app-network
+    restart: on-failure
 
   sqlserver:
     image: mcr.microsoft.com/mssql/server:2022-latest
